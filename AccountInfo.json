@@ -2,7 +2,7 @@
   "AccountName": "kaywilson5k",
   "AccountPassword": "Uo+CLynWJUj33nBZV1cNMeVoLV3IGXvdnMNc1Gc1E4Nw42aZRJUOPegLxNhRJ+yB",
   "RefreshToken": "JRMgyKTbwVgFDPtI1U+XSIj/NcmBLin4HGF1vctGl0mj4YojYMYH4nKU3ViWPTddo38iUZZJJR2wESOehl+cUBg9VaTGwP6rcYZWgVw/6TDuyOzY/ZYVMXgwcR8uTp8myQ8/tlaW53dvzwP897OWCqDV9KTOj9B5L5WDZGJUKy567k38JPjtQVa/iSAF7rXNfDlwOGj3nY78kjr2FSESZMLk1uvlTWquc0Qpfbpmos0xuaGZMCScKS55ztEGtKvEmk3DDFE8FSuwjLYrp+y13gKOrs6WBdEtTjMp1t65CbClSuf6HjacUcjPTcKXxhlb0zO+1E+n1+AbJVIvcAYNzbSTpEfqBJmyK/b/d1kyN//VLPbLQRYu9/NffWX4TgJr1rkhc1o4qs4qzYgt4BDh+5DdxlCOdlErcqugMrGZA0ca0PdyQNeiMfI7xc71gaHR/4IJrvGyc87dNsAUkNz8HcSsOvrHkhnyfToZ9uNvGL7elcT0WcvAXAEM3cfOkpjB3W2R+ww4Ur3+ey08HpF0uJuYzhwKhF5VZjdNHOSCoTh8q9LoG9qExHMLUH0eUD7JlHCaLs6jfkxKNjTGre4csc3a0JVNOJ2e3jjrl/wXeYl+/rgQTaw0Fv19fdjg3RAGhPVuGSwxPrq9KN8voXB7hw==",
-  "LastRefresh": "2024-10-30T12:49:16.6879272+00:00",
+  "LastRefresh": "2024-10-30T18:33:34.9131144+00:00",
   "Index": "AVLX5-JFZG",
   "AesEncrypted": true,
   "AesIV": "Y4vbsPj6bguoOkQa2CveoA==",
@@ -15,7 +15,6 @@
     930381,
     990080,
     1245620,
-    1874000,
     1880830,
     1880832,
     1880837,
@@ -24,8 +23,6 @@
     2991160,
     2991170,
     2991180,
-    2991190,
-    3012890,
-    3012900
+    2991190
   ]
 }
