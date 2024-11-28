@@ -2,7 +2,7 @@
   "AccountName": "thb112129",
   "AccountPassword": "vF6vKAesTnJVf+AWreVBHg==",
   "RefreshToken": "6kipCOpZxkXyerOKff+2wt2qqt6OodDpa6x53DUp29hXksYbIkS4i6yT6VwhMnO9ptJftRTJv7aP4h5xeu1h3cyRHhIKKLI4VA7LYx7U9jccqc0l1F8jaUIHDVlX1UM8dC711q7bRzJbGt1KALqg6zlJfodfB9sz7j/hd+FJKh1rNLBIFQPIIFWMdkUHA28bwGTAOlGVoGaoqkfm7n2QhMjYvisr3LAp/5uBIOF8AfB3xaTSfkZAmBgihUkCz2dtkt9/RXw2LjRStgU/jm7FGJ4zQkeRbXSYZ3D8v5NacmFO/64uwLU1bUboOJ6shshFJQI92zLBm7FwCIMxEIzGAcsF2xHuZz0Y7Ol1t0dfMefkkM/z1uB+sDrh9EMXg0nOhX6QU1DuYNZxZP/EBUM8mxD6n+X/z9DUyp+xqZba+bomnvk/6wigYYPUCBuMApMc4BF4W7lfOVEruvmWsaemFO5F395x/rjE/EvW55PzKlBqzJWsJOrORE3z/RrPH57Ezr2Bi/FioMgRPR+c0jTFmNzARBGInQefUGO+vxmRxD8VDyb+Ot3XsyIq6Wwn1jd36Em5Ek6ioVS9lr2oX5KrUAsLnCsqrasx8qwiC2Gs7pf4CKMyjIpAbGvWFyBg/XIWjz6WTMOwX92QiBly9L+ptg==",
-  "LastRefresh": "2024-11-23T18:37:03.6580093+00:00",
+  "LastRefresh": "2024-11-28T18:35:43.0858434+00:00",
   "Index": "A23BY-23SE",
   "AesEncrypted": true,
   "AesIV": "300BOe6iA1UGCJe4NWq8Lw==",
@@ -13,13 +13,9 @@
     442070,
     512030,
     567210,
-    588650,
     597260,
     2071500,
-    2194530,
-    2699860,
     2828500,
-    3097560,
-    3188550
+    3097560
   ]
 }
