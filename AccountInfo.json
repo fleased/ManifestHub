@@ -2,7 +2,7 @@
   "AccountName": "D5750034",
   "AccountPassword": "g7XgM51CxhL6JiFlzCW8zw==",
   "RefreshToken": "hzDkF03znw+qYDCy5cvIo2kEX05zcOI9XAKA5M8d4iVPNvV2i7H4stJ4EteGxgT3ncogQbjJz4MD6CUCX5omqC8ZsZ2/0RlS8HngH2+jCayyYAM7A9osJI4cQ3FM20KERu1+YPvfiPvfurpEKSxlLPJmp+bLXMzUsgO1Gl6ir7mcP+/89/TDYz3lOn7hh6aBvwDH6KfFzmitOQ28EBUd9b6xFQGkcXmDQWntPB32iIbBC/tRvwJa5hIzx79sOhH2ukl2As63t8169LjoFrshrEX8hAz+DkBuCo76l4o8DGF9k5KNAVZr4Cg4EL/EvnGJUEHWr1dM0fQYsQcMw0s+CCYQxLF8+9wJDLZmNVFkd52OigUQz84wvUR/LvX5uZKD7b81Joxjctmvo+9bR6+JWAlw/7Rvd8J49qElHhBJG67xgBZe8JDjUZmYC6J0dIckSIU9efH0Cx0F2zSh0uSWJJmEdEW+gQLJrv8eOpDmh3c4IaPcG7Vonp1ryBZIaocZOq038+d6MfcgfTS+JwJWYkAH5+kHTDajSQTkmOUcMGoSwU8nHcLYmvgGultgY1dbGTV/NTrt4mffOKLTk5zzbaLr5n4Qn1LiSfSnZOnOZ60pjuhR6mA+tgCsrsOa8mkLadfdX5qr5jbppnHVElHW1Q==",
-  "LastRefresh": "2025-01-18T01:45:03.0646165+00:00",
+  "LastRefresh": "2025-01-18T12:44:03.7327746+00:00",
   "Index": "S3BEX-GN2A",
   "AesEncrypted": true,
   "AesIV": "f7O+srS6h242Jde8KWtTGA==",
@@ -10,6 +10,13 @@
     211,
     215,
     218,
+    220,
+    320,
+    340,
+    360,
+    364,
+    380,
+    420,
     550,
     563,
     564,
@@ -26,6 +33,7 @@
     227050,
     238340,
     242760,
+    282800,
     286160,
     324160,
     394360,
@@ -45,6 +53,7 @@
     814380,
     819030,
     825630,
+    880940,
     880950,
     897220,
     930910,
@@ -113,6 +122,7 @@
     2465200,
     2778580,
     2835570,
-    2855530
+    2855530,
+    2881650
   ]
 }
