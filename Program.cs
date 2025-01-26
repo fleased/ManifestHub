@@ -9,8 +9,10 @@ using System.Security.Cryptography;
 using System.Text;
 
 var result = Parser.Default.ParseArguments<Options>(args)
-    .WithNotParsed(errors => {
-        foreach (var error in errors) {
+    .WithNotParsed(errors =>
+    {
+        foreach (var error in errors)
+        {
             Console.WriteLine(error);
         }
 
@@ -24,19 +26,23 @@ var semaphore = new SemaphoreSlim(result.Value.ConcurrentAccount);
 var tasks = new ConcurrentBag<Task>();
 var writeTasks = new ConcurrentBag<Task>();
 
-switch (result.Value.Mode) {
+switch (result.Value.Mode)
+{
     case "download":
 
         var index = 0;
         var total = gdb.GetAccounts().Count();
 
-        foreach (var accountInfo in gdb.GetAccounts(true)) {
+        foreach (var accountInfo in gdb.GetAccounts(true))
+        {
             await semaphore.WaitAsync();
 
             Console.WriteLine($"[{index++}/{total}]Dispatching {accountInfo.AccountName}...");
-            tasks.Add(Task.Run(async () => {
+            tasks.Add(Task.Run(async () =>
+            {
                 var downloader = new ManifestDownloader(accountInfo);
-                try {
+                try
+                {
                     await downloader.Connect().ConfigureAwait(false);
                     var info = await downloader.GetAccountInfo();
                     await gdb.WriteAccount(info);
@@ -48,14 +54,17 @@ switch (result.Value.Mode) {
                                                             or EResult.AccountLogonDeniedVerifiedEmailRequired
                                                             or EResult.AccountLoginDeniedNeedTwoFactor
                                                             or EResult.AccountDisabled
-                                                            or EResult.InvalidPassword) {
+                                                            or EResult.InvalidPassword)
+                {
                     await gdb.RemoveAccount(accountInfo);
                     Console.WriteLine($"{e.Result} for {downloader.Username}. Removed.");
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     Console.WriteLine(e.Message);
                 }
-                finally {
+                finally
+                {
                     _ = downloader.Disconnect();
                     semaphore.Release();
                 }
@@ -63,66 +72,74 @@ switch (result.Value.Mode) {
         }
 
         await Task.WhenAll(tasks);
-        Console.WriteLine("Waiting for write tasks...");
+        Console.WriteLine("等待写入进程...");
         await Task.WhenAll(writeTasks);
-        Console.WriteLine("Start tag pruning...");
+        Console.WriteLine("开始写入Git Tag...");
         await gdb.PruneExpiredTags();
 
-        Console.WriteLine("Writing summary...");
+        Console.WriteLine("写入概括...");
         var summaryPath = Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY");
-        if (summaryPath != null) {
+        if (summaryPath != null)
+        {
             var summaryFile = File.OpenWrite(summaryPath);
-            summaryFile.Write(System.Text.Encoding.UTF8.GetBytes(gdb.ReportTrackingStatus()));
+            summaryFile.Write(Encoding.UTF8.GetBytes(gdb.ReportTrackingStatus()));
             summaryFile.Close();
-            Console.WriteLine("Summary written.");
-        } else {
-            Console.WriteLine("Cannot find GITHUB_STEP_SUMMARY");
+            Console.WriteLine("概括已写入.");
+        }
+        else
+        {
+            Console.WriteLine("无法找到变量GITHUB_STEP_SUMMARY");
         }
 
-        Console.WriteLine("Done.");
+        Console.WriteLine("完成.");
 
         break;
     case "account":
         var raw = File.ReadAllText(result.Value.Account ?? throw new NullReferenceException());
 
-        // Detect if the account file is encrypted
-        try {
+        try
+        {
             var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(raw);
             var encryptedAccount = dictionary?["payload"];
             var rsa = new RSACryptoServiceProvider();
             var rsaPrivateKey = Environment.GetEnvironmentVariable("RSA_PRIVATE_KEY");
 
-            // Load the RSA private key in PEM format
             rsa.ImportFromPem(rsaPrivateKey);
 
-            // Decrypt the encrypted account information
             var decryptedBytes = rsa.Decrypt(Convert.FromBase64String(encryptedAccount!), true);
             raw = Encoding.UTF8.GetString(decryptedBytes);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Console.WriteLine(e.Message);
         }
 
         KeyValuePair<string, List<string?>>[] account;
 
-        try {
+        try
+        {
             var accountJson = JsonConvert.DeserializeObject<Dictionary<string, List<string?>>>(raw);
             account = accountJson!.ToArray();
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             account = [];
-            Console.WriteLine("Invalid account file.");
+            Console.WriteLine("错误的账号文件.");
             Environment.Exit(1);
         }
 
-        for (var i = result.Value.Index; i < account.Length; i += result.Value.Number) {
+        for (var i = result.Value.Index; i < account.Length; i += result.Value.Number)
+        {
             var infoPrev = gdb.GetAccount(account[i].Key);
 
             ManifestDownloader downloader;
-            if (infoPrev != null) {
+            if (infoPrev != null)
+            {
                 infoPrev.AccountPassword = account[i].Value.FirstOrDefault();
                 downloader = new ManifestDownloader(infoPrev);
-            } else {
+            }
+            else
+            {
                 downloader = new ManifestDownloader(new AccountInfoCallback(
                     account[i].Key,
                     account[i].Value.FirstOrDefault()
@@ -130,18 +147,22 @@ switch (result.Value.Mode) {
             }
 
             await semaphore.WaitAsync();
-            Console.WriteLine($"Dispatching {account[i].Key}...");
-            tasks.Add(Task.Run(async () => {
-                try {
+            Console.WriteLine($"[派遣] {account[i].Key}...");
+            tasks.Add(Task.Run(async () =>
+            {
+                try
+                {
                     await downloader.Connect().ConfigureAwait(false);
                     var info = await downloader.GetAccountInfo();
                     if (infoPrev == null || info.RefreshToken != infoPrev.RefreshToken)
                         await gdb.WriteAccount(info);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     Console.WriteLine(e.Message);
                 }
-                finally {
+                finally
+                {
                     await downloader.Disconnect();
                     semaphore.Release();
                 }
@@ -152,15 +173,15 @@ switch (result.Value.Mode) {
 
         break;
     default:
-        Console.WriteLine("Invalid mode of operation.");
+        Console.WriteLine("未知模式.");
         Environment.Exit(1);
         break;
 }
 
-namespace ManifestHub {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-    internal class Options {
+namespace ManifestHub
+{
+    internal class Options
+    {
         [Value(0, MetaName = "Mode", Default = "download", HelpText = "Mode of operation.")]
         public string? Mode { get; set; }
 
