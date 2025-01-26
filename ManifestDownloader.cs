@@ -105,9 +105,9 @@ class ManifestDownloader {
         if (requestCode == 0) {
             if (retries >= maxRetries)
                 throw new Exception(
-                    $"Failed to get manifest request code. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
+                    $"请求失败. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
             throw new Exception(
-                $"Access denied to manifest. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
+                $"拒绝访问. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
         }
 
         while (retries < maxRetries) {
@@ -121,7 +121,7 @@ class ManifestDownloader {
             }
         }
 
-        if (key == null) throw new Exception($"Failed to get depot key. AppID: {appid}, DepotID: {depotId}");
+        if (key == null) throw new Exception($"获取清单解密KEY失败 AppID: {appid}, DepotID: {depotId}");
 
 
         while (retries < maxRetries) {
@@ -137,7 +137,7 @@ class ManifestDownloader {
         }
 
         throw new Exception(
-            $"Failed to download manifest. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
+            $"无法下载清单. AppID: {appid}, DepotID: {depotId}, ManifestID: {manifestId}");
     }
 
     private async Task<Dictionary<uint, SteamApps.PICSProductInfoCallback.PICSProductInfo>> ResolveAppsAsync() {
@@ -210,13 +210,13 @@ class ManifestDownloader {
                         try {
                             var result = await task();
                             Console.WriteLine(
-                                $"[Success]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}");
+                                $"[成功]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}");
 
                             writeTasks.Add(Task.Run(
                                 async () => {
                                     var commit = await gdb.WriteManifest(result);
                                     Console.WriteLine(
-                                        $"[Written]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}, Commit: {commit?.Sha}");
+                                        $"[写入中]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}, Commit: {commit?.Sha}");
                                 }
                             ));
                         }
@@ -224,7 +224,7 @@ class ManifestDownloader {
                             if (!e.Message.Contains("Access denied to manifest") &&
                                 !e.Message.Contains("Failed to get depot key"))
                                 Console.WriteLine(
-                                    "[Failed]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}, Error: {e.Message}");
+                                    "[失败]: AppID: {result.AppId}, DepotID: {result.DepotId}, ManifestID: {result.ManifestId}, Error: {e.Message}");
                         }
                         finally {
                             semaphore.Release();
@@ -265,7 +265,7 @@ class ManifestDownloader {
 
 
     private async void OnConnected(SteamClient.ConnectedCallback callback) {
-        Console.WriteLine($"Connected to Steam! Logging in '{Username}'...");
+        Console.WriteLine($"已连接至Steam服务器! 正在登录 '{Username}'...");
 
         if (!string.IsNullOrEmpty(_refreshToken)) {
             _steamUser.LogOn(new SteamUser.LogOnDetails {
@@ -303,7 +303,7 @@ class ManifestDownloader {
                     ShouldRememberPassword = true,
                 });
             } else {
-                Console.WriteLine($"Failed to get RefreshToken, Username: {Username}");
+                Console.WriteLine($"无法获取到刷新令牌, 用户名称: {Username}");
                 await _cancellationTokenSource.CancelAsync().ConfigureAwait(false);
             }
         }
@@ -313,23 +313,23 @@ class ManifestDownloader {
         if (callback.Result != EResult.OK) {
             if (!string.IsNullOrEmpty(_refreshToken)) {
                 Console.WriteLine(
-                    $"[Previous RefreshToken] Unable to logon to User: {Username}, Result: {callback.Result}");
+                    $"[获取刷新令牌] 登录账号被拒绝: {Username}, 返回值: {callback.Result}");
 
                 if (callback.Result == EResult.AlreadyLoggedInElsewhere)
-                    _loginReady.TrySetException(new Exception($"Unable to logon to Steam: {callback.Result}"));
+                    _loginReady.TrySetException(new Exception($"无法登录Steam: {callback.Result}"));
 
                 _refreshToken = null;
                 _steamClient.Connect();
             } else {
-                _loginReady.TrySetException(new Exception($"Unable to logon to Steam: {callback.Result}"));
+                _loginReady.TrySetException(new Exception($"无法登录Steam: {callback.Result}"));
             }
 
             return;
         }
 
         Console.WriteLine((string.IsNullOrEmpty(_newRefreshToken)
-                ? "Logged on using previous RefreshToken"
-                : "Logged on using new RefreshToken") + $" as {Username}");
+                ? "使用之前的刷新令牌登录"
+                : "使用新的刷新令牌登录") + $" {Username}");
 
         await _licenseReady.Task.ConfigureAwait(false);
         _loginReady.TrySetResult();
@@ -337,16 +337,16 @@ class ManifestDownloader {
 
     private async void OnDisconnected(SteamClient.DisconnectedCallback callback) {
         if (!callback.UserInitiated) {
-            Console.WriteLine($"[Reconnecting] {Username} disconnected from Steam. Reconnecting in 5 seconds...");
+            Console.WriteLine($"[重连中] {Username} 已掉线. 将会于五秒后重连...");
             await Task.Delay(5000);
             _steamClient.Connect();
         } else {
-            Console.WriteLine($"[Disconnected] {Username} disconnected from Steam.");
+            Console.WriteLine($"[已掉线] {Username} 已断开于Steam服务器的连接.");
         }
     }
 
     private void OnLicenseList(SteamApps.LicenseListCallback callback) {
-        Console.WriteLine($"Received {callback.LicenseList.Count} licenses for {Username}");
+        Console.WriteLine($"从{Username}获取到 {callback.LicenseList.Count} 个许可证");
         _licenses.UnionWith(callback.LicenseList);
         _licenseReady.TrySetResult();
     }
