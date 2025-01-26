@@ -59,11 +59,11 @@ public partial class GitDatabase {
         // Wait for lock with status message
         while (!await locker.WaitAsync(5000))
             Console.WriteLine(
-                $"Manifest {manifest.DepotId}_{manifest.ManifestId} is waiting for lock on {branchName}...");
+                $"清单 {manifest.DepotId}_{manifest.ManifestId} 正在等待对 {branchName} 的锁定...");
 
         // Skip if manifest already exists
         if (HasManifest(manifest.AppId, manifest.DepotId, manifest.ManifestId)) {
-            Console.WriteLine($"Manifest {manifest.DepotId}_{manifest.ManifestId} already exists.");
+            Console.WriteLine($"清单 {manifest.DepotId}_{manifest.ManifestId} 已存在.");
             locker.Release();
             return null;
         }
@@ -110,7 +110,7 @@ public partial class GitDatabase {
             // Skip if no changes
             var newTree = _repo.ObjectDatabase.CreateTree(treeDef);
             if (tree != null && newTree.Id == tree.Id) {
-                Console.WriteLine($"Manifest {manifest.DepotId}_{manifest.ManifestId} no changes.");
+                Console.WriteLine($"清单 {manifest.DepotId}_{manifest.ManifestId} 无改变.");
 
                 try {
                     // Failsafe: push branch tip as tag
@@ -130,7 +130,7 @@ public partial class GitDatabase {
             var newCommit = _repo.ObjectDatabase.CreateCommit(
                 _signature,
                 _signature,
-                $"Update {manifest.DepotId}_{manifest.ManifestId}.manifest",
+                $"更新 {manifest.DepotId}_{manifest.ManifestId}.manifest",
                 newTree,
                 branch != null ? new[] { branch.Tip } : [],
                 true);
@@ -271,11 +271,11 @@ public partial class GitDatabase {
         (int Active, int Orphan, int AccessDenied) data) {
         // Append a status table for a category (Apps or Depots) to the markdown builder
         markdownBuilder.AppendLine($"## {category}\n");
-        markdownBuilder.AppendLine("| Status | Count |");
+        markdownBuilder.AppendLine("| 状态 | 数量 |");
         markdownBuilder.AppendLine("|--------|-------|");
-        markdownBuilder.AppendLine($"| Active | {data.Active} |");
-        markdownBuilder.AppendLine($"| Orphan | {data.Orphan} |");
-        markdownBuilder.AppendLine($"| Access Denied | {data.AccessDenied} |");
+        markdownBuilder.AppendLine($"| 好 | {data.Active} |");
+        markdownBuilder.AppendLine($"| emm | {data.Orphan} |");
+        markdownBuilder.AppendLine($"| 拒绝访问 | {data.AccessDenied} |");
         markdownBuilder.AppendLine();
     }
 
